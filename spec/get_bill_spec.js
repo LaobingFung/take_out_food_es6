@@ -31,7 +31,7 @@ describe('print final bill', function() {
     }];
     let promotion_1 = {
       type: '指定菜品半价',
-      items: ['ITEM0001', 'ITEM0022'],
+      specialItems: ['黄焖鸡', '凉皮'],
       discount: 13.00
     };
     let totalPrice_1 = 25;
