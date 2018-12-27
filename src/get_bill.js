@@ -1,27 +1,24 @@
 'use strict';
+
 function getBill(itemsPriceList, promotion, totalPrice) {
-  let output = '============= 订餐明细 =============\n';
-  itemsPriceList.forEach(function(curObj) {
-    let item = curObj.name + ' x ' + curObj.count + ' = ' + curObj.subtotal + '元\n';
-    output += item;
-  })
-  output += '-----------------------------------\n';
+  let itemsPrint = itemsPriceList.reduce(function(accStr, curItem, curI, arr) {
+    return accStr += `${curItem.name} x ${curItem.count} = ${curItem.subtotal}元${curI === arr.length - 1 ? '' : '\n'}`;
+  }, ``);
+  let promotionPrint;
   if (promotion.discount !== 0) {
-    if (promotion.type === '满30减6元') {
-      output += '使用优惠:\n满30减6元，省' + promotion.discount.toString() + '元\n';
-    } else if (promotion.type === '指定菜品半价') {
-      output += '使用优惠:\n指定菜品半价(';
-      promotion.specialItems.forEach(function(curStr, curI, arr) {
-        output += curStr;
-        output += (curI === (arr.length - 1)) ? ')，省' : '，';
-      })
-      output += promotion.discount.toString() + '元\n';
-    }
-    output += '-----------------------------------\n';
+    promotionPrint = `${promotion.type}${promotion.specialItems ? `(${promotion.specialItems.join('，')})` : ''}，省${promotion.discount}元`;
+  } else {
+    promotionPrint = '';
   }
-  output += '总计：' + totalPrice.toString() + '元\n';
-  output += '===================================';
-  //return final bill to print
-  return output;
+  let bill = `
+============= 订餐明细 =============
+${itemsPrint}
+-----------------------------------
+使用优惠:
+${promotionPrint}
+-----------------------------------
+总计：${totalPrice}元
+===================================`.trim();
+  return bill;
 }
 module.exports = getBill;
